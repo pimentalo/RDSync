@@ -28,4 +28,12 @@ namespace RDSync
             throw new NotImplementedException();
         }
     }
+
+    internal class MediaRemovableDevice : RemovableDevice
+    {
+        internal MediaRemovableDevice(MediaDevices.MediaDevice device)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

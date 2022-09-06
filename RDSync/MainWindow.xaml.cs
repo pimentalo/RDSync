@@ -23,6 +23,7 @@ namespace RDSync
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new DevicesDataContext();
         }
     }
 }
