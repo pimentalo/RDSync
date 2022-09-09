@@ -10,7 +10,7 @@ namespace RDSync
     /// <summary>
     /// Represents a removable device (media device)
     /// </summary>
-    internal class RemovableDevice
+    internal abstract class RemovableDevice
     {
         /// <summary>
         /// This Id must persist between sessions
@@ -23,17 +23,65 @@ namespace RDSync
 
         public string Details { get; set; }
 
-        public IEnumerable<string> ListFiles()
+        public abstract IEnumerable<string> GetDirectories(string path);
+        public IEnumerable<string> GetFiles(string path)
         {
-            throw new NotImplementedException();
+            return GetFiles(path, null);
         }
+        public abstract IEnumerable<string> GetFiles(string path, string? filter);
     }
 
     internal class MediaRemovableDevice : RemovableDevice
     {
+        private MediaDevices.MediaDevice Device { get; }
         internal MediaRemovableDevice(MediaDevices.MediaDevice device)
         {
-            throw new NotImplementedException();
+            if (device == null) throw new ArgumentNullException("device");
+            Device = device;
+            this.Id = device.DeviceId;
+            this.Name = device.FriendlyName;
+            this.Description = device.ToString();
+            try
+            {
+                device.Connect(MediaDevices.MediaDeviceAccess.GenericRead, MediaDevices.MediaDeviceShare.Read);
+
+                this.Details = $"Manufacturer: {device.Manufacturer}: \tModel: {device.Model}\tSN: {device.SerialNumber}\tFW: {device.FirmwareVersion}\t Protocol: {device.Protocol}";
+            }
+            finally
+            {
+                device.Disconnect();
+            }
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        public override IEnumerable<string> GetDirectories(string root)
+        {
+            try
+            {
+                Device.Connect();
+                return Device.GetDirectories(root);
+            }
+            finally
+            {
+                Device.Disconnect();
+            }
+        }
+
+        public override IEnumerable<string> GetFiles(string path, string? filter)
+        {
+            try
+            {
+                Device.Connect();
+                return Device.GetFiles(path, filter);
+            }
+            finally
+            {
+                Device.Disconnect();
+            }
         }
     }
 }

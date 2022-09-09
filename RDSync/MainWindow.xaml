@@ -11,19 +11,31 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ListBox d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Column="0">
+        <ListBox ItemsSource="{Binding Devices}" SelectedItem="{Binding SelectedDevice}" Grid.Column="0">
             
         </ListBox>
-        <Grid Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition>
-                    
-                </ColumnDefinition>
-                <ColumnDefinition>
-                    
-                </ColumnDefinition>
-            </Grid.ColumnDefinitions>
-        </Grid>
+        <DockPanel Grid.Column="1" LastChildFill="True">
+            <Expander DockPanel.Dock="Top" Header="{Binding SelectedDevice.Name}" VerticalAlignment="Top">
+                <StackPanel Background="#FFE5E5E5">
+                    <TextBox Text="{Binding SelectedDevice.Name}"></TextBox>
+                    <TextBox Text="{Binding SelectedDevice.Description}"></TextBox>
+                    <TextBox Text="{Binding SelectedDevice.Details}"></TextBox>
+                </StackPanel>
+            </Expander>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition>
 
+                    </ColumnDefinition>
+                    <ColumnDefinition>
+
+                    </ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TreeView Grid.Column="0" Name="tvSrc"></TreeView>
+                <TreeView Grid.Column="1" Name="tvDst"></TreeView>
+            </Grid>
+
+        </DockPanel>
     </Grid>
 </Window>
