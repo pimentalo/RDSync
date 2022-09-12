@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace RDSync
 {
 
     /// <summary>
-    /// Represents a removable device (media device)
+    /// Represents a removable device (media device) in the data context
     /// </summary>
     internal abstract class RemovableDevice
     {
@@ -23,12 +24,22 @@ namespace RDSync
 
         public string Details { get; set; }
 
-        public abstract IEnumerable<string> GetDirectories(string path);
+        /// <summary>
+        /// Directories: having them in an observable collection make them easy to load asyncchronously
+        /// </summary>
+        public abstract ReadOnlyObservableCollection<Directory> Directories { get; set; }
+       
         public IEnumerable<string> GetFiles(string path)
         {
             return GetFiles(path, null);
         }
         public abstract IEnumerable<string> GetFiles(string path, string? filter);
+    }
+
+    internal class Directory
+    { 
+        public string Name { get; set; }
+        public IEnumerable<Directory> Directories { get; set; }
     }
 
     internal class MediaRemovableDevice : RemovableDevice
@@ -58,7 +69,9 @@ namespace RDSync
             return Name;
         }
 
-        public override IEnumerable<string> GetDirectories(string root)
+        private IEnumerable<Directory> _Directories;
+
+        public  IEnumerable<string> GetDirectories(string root)
         {
             try
             {
@@ -69,6 +82,15 @@ namespace RDSync
             {
                 Device.Disconnect();
             }
+        }
+
+        public override IEnumerable<Directory> Directories { 
+            get
+            {
+
+                return
+            } 
+            set => throw new NotImplementedException();
         }
 
         public override IEnumerable<string> GetFiles(string path, string? filter)
