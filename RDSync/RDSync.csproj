@@ -11,4 +11,8 @@
     <PackageReference Include="MediaDevices" Version="1.9.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RDSync.Core\RDSync.Core.csproj" />
+  </ItemGroup>
+
 </Project>

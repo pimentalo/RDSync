@@ -13,9 +13,9 @@ namespace RDSync
         void RefreshDevices()
         {
             Devices.Clear();
-            foreach(var md in MediaDevices.MediaDevice.GetDevices())
+            foreach (var md in MediaDevices.MediaDevice.GetDevices())
             {
-                Devices.Add(new MediaRemovableDevice(md));
+                Devices.Add(new Core.MediaDeviceEndPoint(md));
             }
         }
         internal DevicesDataContext()
@@ -23,10 +23,10 @@ namespace RDSync
             RefreshDevices();
         }
 
-       public ObservableCollection<RemovableDevice> Devices { get; set; } = new ObservableCollection<RemovableDevice>();
+        public ObservableCollection<Core.EndPoint> Devices { get; set; } = new ObservableCollection<Core.EndPoint>();
 
-        private RemovableDevice _RemovableDevice = null;
-       public  RemovableDevice SelectedDevice
+        private Core.EndPoint _RemovableDevice = null;
+        public Core.EndPoint SelectedDevice
         {
             get { return _RemovableDevice; }
             set { _RemovableDevice = value; OnPropertyChanged(nameof(SelectedDevice)); }
