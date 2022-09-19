@@ -10,6 +10,7 @@
         public Directory Parent { get;}
         public virtual string Name { get; set; }
 
+        public abstract IEnumerable<Directory> GetDirectories();
         public abstract IEnumerable<File> GetFiles();
 
         public string FullPath { get { return (Parent == null ? "" : Parent.FullPath) + $"/{Name}"; } }

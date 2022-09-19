@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,12 @@ namespace RDSync
             {
                 Devices.Add(new Core.MediaDeviceEndPoint(md));
             }
+
+            foreach (var drive in DriveInfo.GetDrives().Where(d => d.DriveType.HasFlag (DriveType.Removable) ))
+            {
+                Devices.Add(new Core.DriveEndPoint(drive.VolumeLabel, drive.RootDirectory));
+            }
+           
         }
         internal DevicesDataContext()
         {

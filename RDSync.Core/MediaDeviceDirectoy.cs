@@ -13,9 +13,17 @@ namespace RDSync.Core
         {
             Device = device;
         }
+
+        public override IEnumerable<Directory> GetDirectories()
+        {
+            return Device.Execute(d => d.GetDirectories(FullPath).Select(subdir => new MediaDeviceDirectory(Device, subdir, this)));
+        }
+
+
         public override IEnumerable<File> GetFiles()
         {
             return Device.Execute(d => d.GetFiles(FullPath).Select(f => new MediaDeviceFile(Device, f)));
         }
+
     }
 }
