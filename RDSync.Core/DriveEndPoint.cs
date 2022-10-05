@@ -9,7 +9,10 @@ namespace RDSync.Core
     public class DriveEndPoint : EndPoint
     {
         private DirectoryInfo Root { get; }
-        public DriveEndPoint(string name, DirectoryInfo root): base(name, "","")
+
+        public override string DeviceIdentifier => Root.FullName;
+
+        public DriveEndPoint(DirectoryInfo root, string name): base(name, "","")
         {
             Root = root;
         }

@@ -16,6 +16,8 @@ namespace RDSync.Core
         public string Description { get; protected set; }
         public string UniqueId { get; protected set; }
 
+        public abstract string DeviceIdentifier { get; }
+
         public virtual Directory GetDirectory(string path)
         {
             var elements = path.Split("/".ToCharArray());
