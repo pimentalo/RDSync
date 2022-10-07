@@ -25,5 +25,12 @@ namespace RDSync
             InitializeComponent();
             DataContext = new DevicesDataContext();
         }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            var devWindow = new DeviceWindow();
+            devWindow.Owner = this;
+            devWindow.Show();
+        }
     }
 }

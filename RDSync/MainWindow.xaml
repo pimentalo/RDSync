@@ -7,41 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <ListBox ItemsSource="{Binding Devices}" SelectedItem="{Binding SelectedDevice}" Grid.Column="0">
-            
-        </ListBox>
-        <DockPanel Grid.Column="1" LastChildFill="True">
-            <Expander DockPanel.Dock="Top" Header="{Binding SelectedDevice.Name}" VerticalAlignment="Top">
-                <StackPanel Background="#FFE5E5E5">
-                    <TextBox Text="{Binding SelectedDevice.Name, Mode=OneWay}" IsReadOnly="True"></TextBox>
-                    <TextBox Text="{Binding SelectedDevice.Description, Mode=OneWay}" IsReadOnly="True"></TextBox>
-                    <TextBox Text="{Binding SelectedDevice.Details, Mode=OneWay}" IsReadOnly="True"></TextBox>
-                </StackPanel>
-            </Expander>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition>
+        <DockPanel LastChildFill="True">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Background="Gray">
+                <Button Name="btnAdd" Content="Ajouter" Click="btnAdd_Click"></Button>
+            </StackPanel>
 
-                    </ColumnDefinition>
-                    <ColumnDefinition>
-
-                    </ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <TreeView Grid.Column="0" Name="tvSrc" ItemsSource="{Binding SelectedDevice.Directories}">
-                  <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
-                      <Label Content="{Binding Name}" />
-                    </HierarchicalDataTemplate>
-                  </TreeView.ItemTemplate>
-                </TreeView>
-                <TreeView Grid.Column="1" Name="tvDst"></TreeView>
-            </Grid>
+            <ListBox ItemsSource="{Binding Devices}" SelectedItem="{Binding SelectedDevice}" >
+            </ListBox>
 
         </DockPanel>
+            
     </Grid>
 </Window>
