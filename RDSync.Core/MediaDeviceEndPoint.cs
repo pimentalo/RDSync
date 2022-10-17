@@ -8,6 +8,7 @@ namespace RDSync.Core
 {
     public class MediaDeviceEndPoint : EndPoint
     {
+        
         private MediaDevices.MediaDevice Device { get; }
 
         internal E Execute<E>(Func<MediaDevices.MediaDevice, E> func)
@@ -31,7 +32,7 @@ namespace RDSync.Core
 
         public string Details { get; set; }
 
-        public override string DeviceIdentifier => Execute(d => Device.PnPDeviceID);
+        public override string DeviceIdentifier => "Device:"+Execute(d => Device.PnPDeviceID);
 
         public MediaDeviceEndPoint(MediaDevices.MediaDevice device) : base(device.FriendlyName, "", "")
         {

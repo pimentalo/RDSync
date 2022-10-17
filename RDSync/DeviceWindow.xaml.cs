@@ -23,8 +23,11 @@ namespace RDSync
         public DeviceWindow()
         {
             InitializeComponent();
+        }
 
-
+        public DeviceWindow(Syncer syncer): this()
+        {
+            this.Syncer = syncer;
         }
 
         public Syncer Syncer {get; set;}

@@ -24,6 +24,27 @@ namespace RDSync
         {
             InitializeComponent();
             DataContext = new DevicesDataContext();
+
+     //       LoadDevices();
+        }
+
+
+        private string GetDevicesFileName { get
+            {
+                return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Devices.xml");
+            } 
+        }
+
+        public void LoadDevices()
+        {
+            try
+            {
+                throw new NotImplementedException();
+
+            } catch (Exception e)
+            {
+                System.Diagnostics.Trace.TraceError("Error reading configuration: {0}", e.ToString());
+            }
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)

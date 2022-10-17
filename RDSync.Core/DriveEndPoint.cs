@@ -17,6 +17,10 @@ namespace RDSync.Core
             Root = root;
         }
 
+        public DriveEndPoint(string directory, string? name = null): this (new DirectoryInfo(directory), name ?? directory)
+        {
+        }
+
         public override IEnumerable<Directory> GetDirectories(Directory? root = null)
         {
             return Root.GetDirectories().Select(d => new DriveDirectory(d, null));
