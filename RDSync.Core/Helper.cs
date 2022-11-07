@@ -31,7 +31,7 @@ namespace RDSync.Core
         /// <returns></returns>
         public static EndPoint CreateEndPointFromIdentifier(string identifier)
         {
-            EndPoint result;
+            EndPoint? result = null;
             if (identifier.StartsWith("Device:"))
             {
                 result = new MediaDeviceEndPoint(identifier.Substring("Device:".Length));

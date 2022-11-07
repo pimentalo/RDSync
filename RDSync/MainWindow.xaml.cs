@@ -20,16 +20,30 @@ namespace RDSync
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Strong typed datacontext
+        /// </summary>
+        private MainWindowDataContext ThisContext => (MainWindowDataContext)this.DataContext;
+
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new DevicesDataContext();
 
-     //       LoadDevices();
+            // Load datacontext
+            try
+            {
+                DataContext = ApplicationData.LoadData();
+            } catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError($"Error loading data file: {ex.Message}");
+                DataContext = new MainWindowDataContext();
+                ApplicationData.SaveData(ThisContext);
+            }
         }
 
 
-        private string GetDevicesFileName { get
+        private string GetDevicesFileName { 
+            get
             {
                 return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Devices.xml");
             } 
@@ -51,7 +65,11 @@ namespace RDSync
         {
             var devWindow = new DeviceWindow();
             devWindow.Owner = this;
-            devWindow.Show();
+            if (devWindow.ShowDialog() == true)
+            {
+                ThisContext.UpsertSyncerDefinition(devWindow.SyncerDefinition);
+                ApplicationData.SaveData(this.ThisContext);
+            }
         }
     }
 }

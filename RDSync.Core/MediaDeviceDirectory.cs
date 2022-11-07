@@ -22,7 +22,7 @@ namespace RDSync.Core
 
         public override IEnumerable<File> GetFiles()
         {
-            return Device.Execute(d => d.GetFiles(FullPath).Select(f => new MediaDeviceFile(Device, f)));
+            return Device.Execute(d => d.GetFiles (FullPath).Select(f => new MediaDeviceFile(Device, f)));
         }
 
     }

@@ -12,7 +12,7 @@
                 <Button Name="btnAdd" Content="Ajouter" Click="btnAdd_Click"></Button>
             </StackPanel>
 
-            <ListBox ItemsSource="{Binding Devices}" SelectedItem="{Binding SelectedDevice}" >
+            <ListBox ItemsSource="{Binding Syncers}" SelectedItem="{Binding SelectedSyncer}" >
             </ListBox>
 
         </DockPanel>

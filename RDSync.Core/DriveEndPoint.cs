@@ -10,7 +10,7 @@ namespace RDSync.Core
     {
         private DirectoryInfo Root { get; }
 
-        public override string DeviceIdentifier => Root.FullName;
+        public override string DeviceIdentifier => "Directory:"+Root.FullName;
 
         public DriveEndPoint(DirectoryInfo root, string name): base(name, "","")
         {
@@ -22,8 +22,14 @@ namespace RDSync.Core
         }
 
         public override IEnumerable<Directory> GetDirectories(Directory? root = null)
-        {
-            return Root.GetDirectories().Select(d => new DriveDirectory(d, null));
+        {   try
+            {
+                return Root.GetDirectories().Select(d => new DriveDirectory(d, null));
+            }
+            catch (System.IO.IOException e)
+            {
+                throw new DeviceNotReadyException(e);
+            }
         }
     }
 }

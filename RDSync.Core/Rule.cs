@@ -40,11 +40,11 @@ namespace RDSync.Core
         /// Execute the rule
         /// </summary>
         /// <param name="device"></param>
-        public virtual void Execute(EndPoint device)
+        internal virtual void Execute(Syncer syncer)
         {
             if ((Options & TransferOptions.FromDeviceToLocal) == TransferOptions.FromDeviceToLocal)
             {
-                CopyDirectoryFromDeviceToLocal(device, this.DevicePath, this.FileFilter, this.LocalPath);
+                CopyDirectoryFromDeviceToLocal(syncer, this, this.DevicePath, this.FileFilter, this.LocalPath);
             }
         }
 
@@ -54,20 +54,53 @@ namespace RDSync.Core
             return result;
         }
 
-        private static void CopyDirectoryFromDeviceToLocal(EndPoint device, string dir, string filter, string localDir)
+        private static void CopyDirectoryFromDeviceToLocal(Syncer syncer, Rule rule, string dir, string filter, string localDir)
         {
             var regex = FilterToRegex(filter);
-            var root = device.GetDirectory(dir);
+            var root = syncer.Device.GetDirectory(dir);
+
+            foreach (var file in root.GetFiles().Where(f => System.Text.RegularExpressions.Regex.IsMatch(f.Name, regex)))
+            {
+                // DIRTY
+                var localFileName = rule.LocalPath;
+
+                foreach (var p in dir.Split("/"))
+                {
+                    localFileName = Path.Combine(localFileName, p);
+                }
+                localFileName = Path.Combine(localFileName, file.Name);
+
+                // Check changes
+                if (System.IO.File.Exists(localFileName))
+                {
+                    var fi = new FileInfo(localFileName);
+                    file.WillBeCopied = false;
+                    if ((fi.Length != file.Length) || (fi.LastWriteTime <= file.LastWriteTime))
+                    {
+                        file.WillBeCopied = true;
+                    }
+                } else
+                {
+                    file.WillBeCopied = true;
+                }
+
+                syncer.RaiseFileDetected(rule, file);
+
+
+
+                if (file.WillBeCopied)
+                {
+                    syncer.RaiseFileCopied(rule, file);
+
+                    using (var s = file.GetStream())
+                    {
+                    }
+                }
+            }
 
             foreach (var d in root.GetDirectories())
             {
-                foreach (var file in d.GetFiles().Where(f => System.Text.RegularExpressions.Regex.IsMatch(f.Name, regex)))
-                {
-                    using (var s = file.GetStream())
-                    {
-                      //  var localFilename = 
-                    }
-                }
+                CopyDirectoryFromDeviceToLocal(syncer, rule, d.FullPath, filter, localDir);
             }
 
         }
